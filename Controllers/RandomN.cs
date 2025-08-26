@@ -19,15 +19,15 @@ namespace RandomNumberAPI.Controllers
                 {
                     return BadRequest("El valor de min no puede ser mayor que max.");
                 }
-                return Ok(_random.Next(min.Value, max.Value + 1));
+                return Ok(new { result = _random.Next(min.Value, max.Value + 1) });
             }
-            return Ok(_random.Next());
+            return Ok(new { result = _random.Next() });
         }
 
         [HttpGet("decimal")]
         public IActionResult GetRandomDecimal()
         {
-            return Ok(_random.NextDouble());
+            return Ok(new { result = _random.NextDouble() });
         }
 
         [HttpGet("string")]
@@ -44,7 +44,7 @@ namespace RandomNumberAPI.Controllers
             {
                 stringBuilder.Append(chars[_random.Next(chars.Length)]);
             }
-            return Ok(stringBuilder.ToString());
+            return Ok(new { result = stringBuilder.ToString() });
         }
 
         [HttpPost("custom")]
@@ -56,12 +56,12 @@ namespace RandomNumberAPI.Controllers
                 {
                     return BadRequest("El valor de min no puede ser mayor que max.");
                 }
-                return Ok(_random.Next(request.Min, request.Max + 1));
+                return Ok(new { result = _random.Next(request.Min, request.Max + 1) });
             }
             else if (request.Type == "decimal")
             {
                 double randomDecimal = Math.Round(_random.NextDouble(), request.Decimals);
-                return Ok(randomDecimal);
+                return Ok(new { result = randomDecimal });
             }
             else if (request.Type == "string")
             {
@@ -73,7 +73,7 @@ namespace RandomNumberAPI.Controllers
                 var stringResult = GetRandomString(request.Length);
                 if (stringResult is OkObjectResult okResult)
                 {
-                    return Ok(okResult.Value);
+                    return Ok(new { result = okResult.Value });
                 }
                 return stringResult; // En caso de que haya un error
             }
